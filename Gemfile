@@ -70,3 +70,5 @@ group :test do
 end
 
 gem "devise", "~> 5.0"
+
+gem "ostruct", "~> 0.6.3"
