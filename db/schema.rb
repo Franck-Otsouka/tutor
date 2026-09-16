@@ -10,29 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_09_16_062241) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -43,89 +43,89 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_16_062241) do
   end
 
   create_table "bookings", force: :cascade do |t|
-    t.bigint "student_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "end_time"
     t.bigint "service_id", null: false
     t.datetime "start_time"
-    t.datetime "end_time"
     t.string "status"
-    t.datetime "created_at", null: false
+    t.bigint "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_bookings_on_service_id"
     t.index ["student_id"], name: "index_bookings_on_student_id"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "coach_profiles", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "headline"
-    t.text "description"
-    t.decimal "hourly_rate"
-    t.integer "years_experience"
-    t.boolean "verified"
     t.datetime "created_at", null: false
+    t.text "description"
+    t.string "headline"
+    t.decimal "hourly_rate"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.boolean "verified"
+    t.integer "years_experience"
     t.index ["user_id"], name: "index_coach_profiles_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "post_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
+    t.bigint "post_id", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "community_groups", force: :cascade do |t|
-    t.string "name"
+    t.datetime "created_at", null: false
     t.text "description"
     t.boolean "membership_required"
-    t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "group_memberships", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "community_group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["community_group_id"], name: "index_group_memberships_on_community_group_id"
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
   end
 
   create_table "membership_plans", force: :cascade do |t|
-    t.string "name"
-    t.decimal "monthly_price"
-    t.text "description"
     t.datetime "created_at", null: false
+    t.text "description"
+    t.decimal "monthly_price"
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "posts", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "community_group_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["community_group_id"], name: "index_posts_on_community_group_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "services", force: :cascade do |t|
-    t.bigint "coach_profile_id", null: false
+    t.boolean "active"
     t.bigint "category_id", null: false
-    t.string "title"
+    t.bigint "coach_profile_id", null: false
+    t.datetime "created_at", null: false
     t.text "description"
     t.integer "duration"
     t.decimal "price"
-    t.boolean "active"
-    t.datetime "created_at", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_services_on_category_id"
     t.index ["coach_profile_id"], name: "index_services_on_coach_profile_id"
@@ -133,50 +133,50 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_16_062241) do
 
   create_table "streams", force: :cascade do |t|
     t.bigint "coach_profile_id", null: false
-    t.string "title"
+    t.datetime "created_at", null: false
     t.text "description"
     t.datetime "scheduled_at"
-    t.integer "visibility"
-    t.datetime "created_at", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.integer "visibility"
     t.index ["coach_profile_id"], name: "index_streams_on_coach_profile_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
     t.bigint "membership_plan_id", null: false
     t.string "status"
     t.string "stripe_subscription_id"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["membership_plan_id"], name: "index_subscriptions_on_membership_plan_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
-    t.integer "role"
     t.text "bio"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "email"
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
+    t.string "first_name"
+    t.string "last_name"
     t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.integer "role"
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "videos", force: :cascade do |t|
     t.bigint "coach_profile_id", null: false
-    t.string "title"
-    t.text "description"
-    t.integer "visibility"
-    t.boolean "published"
     t.datetime "created_at", null: false
+    t.text "description"
+    t.boolean "published"
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.integer "visibility"
     t.index ["coach_profile_id"], name: "index_videos_on_coach_profile_id"
   end
 
