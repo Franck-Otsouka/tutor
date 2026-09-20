@@ -1,0 +1,40 @@
+
+<div class="container py-5 coach-profiles-page">
+  <h1>Create Your Coach Profile</h1>
+
+  <%= form_with model: @coach_profile do |form| %>
+
+    <% if @coach_profile.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% @coach_profile.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :headline, class: "form-label" %>
+      <%= form.text_field :headline, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, class: "form-label" %>
+      <%= form.text_area :description, rows: 5, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :hourly_rate, class: "form-label" %>
+      <%= form.number_field :hourly_rate, step: 0.01, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :years_experience, class: "form-label" %>
+      <%= form.number_field :years_experience, class: "form-control" %>
+    </div>
+
+    <%= form.submit "Create Profile", class: "btn btn-primary" %>
+
+  <% end %>
+</div>

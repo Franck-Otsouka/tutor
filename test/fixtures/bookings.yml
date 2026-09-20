@@ -1,15 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   student: one
-  service: one
-  start_time: 2026-09-16 08:19:55
-  end_time: 2026-09-16 08:19:55
-  status: MyString
+  service: two
+  start_time: 2026-09-20 10:00:00
+  end_time: 2026-09-20 10:45:00
+  status: completed
 
 two:
-  student: two
+  student: one
   service: two
-  start_time: 2026-09-16 08:19:55
-  end_time: 2026-09-16 08:19:55
-  status: MyString
+  start_time: 2026-09-21 10:00:00
+  end_time: 2026-09-21 10:45:00
+  status: pending

@@ -1,15 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  role: 1
-  bio: MyText
+  first_name: Test
+  last_name: Student
+  email: student@test.com
+  role: 0
+  bio: Test student
 
 two:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
+  first_name: Test
+  last_name: Coach
+  email: coach@test.com
   role: 1
-  bio: MyText
+  bio: Test coach

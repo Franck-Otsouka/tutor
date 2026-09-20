@@ -1,0 +1,43 @@
+// =========================================================
+// Bootstrap configuration
+// =========================================================
+
+@import "bootstrap/scss/functions";
+
+// Custom Bootstrap variable overrides
+@import "abstract/variables";
+
+// Bootstrap core
+@import "bootstrap/scss/bootstrap";
+
+// Bootstrap Icons
+@import "bootstrap-icons/font/bootstrap-icons";
+
+
+// =========================================================
+// Application layout
+// =========================================================
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+// =========================================================
+// Custom components
+// =========================================================
+
+@import "components/navbar";
+@import "components/buttons";
+
+
+// =========================================================
+// Page styles
+// =========================================================
+
+@import "home";
+@import "coach_profiles";
+@import "categories";
+@import "services";

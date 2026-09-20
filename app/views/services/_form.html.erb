@@ -1,0 +1,51 @@
+<%= form_with model: service do |form| %>
+
+  <% if service.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% service.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :category_id, "Category", class: "form-label" %>
+
+    <%= form.collection_select :category_id,
+        categories,
+        :id,
+        :name,
+        { prompt: "Select a category" },
+        { class: "form-select" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, rows: 5, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :duration, "Duration (minutes)", class: "form-label" %>
+    <%= form.number_field :duration, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :price, class: "form-label" %>
+    <%= form.number_field :price, step: 0.01, class: "form-control" %>
+  </div>
+
+  <div class="form-check mb-4">
+    <%= form.check_box :active, class: "form-check-input" %>
+    <%= form.label :active, "Active", class: "form-check-label" %>
+  </div>
+
+  <%= form.submit class: "btn btn-primary" %>
+
+<% end %>

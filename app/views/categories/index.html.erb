@@ -1,0 +1,27 @@
+<div class="container py-5 categories-page">
+  <h1>Categories</h1>
+
+  <p class="text-muted mb-4">
+    Explore subjects and areas where you can find a coach.
+  </p>
+
+  <div class="row g-4">
+    <% @categories.each do |category| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card category-card h-100">
+          <div class="card-body">
+            <h4 class="category-name"><%= category.name %></h4>
+
+            <p class="category-count">
+              <%= pluralize(category.services.count, "service") %>
+            </p>
+
+            <%= link_to "Explore",
+                category_path(category),
+                class: "btn btn-outline-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

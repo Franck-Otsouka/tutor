@@ -1,0 +1,35 @@
+.navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navbar-avatar-placeholder {
+  background-color: #6c757d;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.navbar .dropdown-menu {
+  min-width: 240px;
+  margin-top: 0.5rem;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .dropdown-item {
+  padding: 0.55rem 1rem;
+  &:hover {
+    border-radius: 6px;
+  }
+}
+
+.navbar .dropdown-toggle::after {
+  margin-left: 0.25rem;
+}

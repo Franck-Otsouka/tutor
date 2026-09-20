@@ -1,0 +1,39 @@
+<div class="container py-5 categories-page">
+  <h1><%= @category.name %></h1>
+
+  <p class="text-muted mb-4">
+    Available coaching services in this category.
+  </p>
+
+  <div class="row g-4">
+    <% @services.each do |service| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card service-card h-100">
+          <div class="card-body">
+            <h4><%= service.title %></h4>
+
+            <p>
+              <%= truncate(service.description, length: 150) %>
+            </p>
+
+            <p>
+              Coach:
+              <strong>
+                <%= service.coach_profile.user.first_name %>
+                <%= service.coach_profile.user.last_name %>
+              </strong>
+            </p>
+
+            <p>
+              <strong><%= number_to_currency(service.price) %></strong>
+            </p>
+
+            <%= link_to "View Service",
+                service_path(service),
+                class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

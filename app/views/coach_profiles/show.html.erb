@@ -1,0 +1,100 @@
+<div class="container py-5 coach-profiles-page coach-profile">
+
+  <div class="profile-header">
+    <div class="profile-layout">
+
+      <div class="profile-avatar-section">
+        <% if @coach_profile.user.avatar.attached? %>
+          <%= image_tag @coach_profile.user.avatar,
+              class: "profile-coach-avatar",
+              alt: "#{@coach_profile.user.first_name} #{@coach_profile.user.last_name}" %>
+        <% else %>
+          <div class="profile-coach-avatar profile-coach-avatar-placeholder">
+            <i class="bi bi-person"></i>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="profile-info-section">
+        <h1>
+          <%= @coach_profile.user.first_name %>
+          <%= @coach_profile.user.last_name %>
+        </h1>
+
+        <h4 class="profile-headline">
+          <%= @coach_profile.headline %>
+        </h4>
+
+        <% if @coach_profile.verified %>
+          <span class="badge bg-success mb-3 verified-badge">
+            Verified Coach
+          </span>
+        <% end %>
+
+        <p class="lead profile-description">
+          <%= @coach_profile.description %>
+        </p>
+
+        <div class="mb-4">
+          <strong>Experience:</strong>
+          <%= @coach_profile.years_experience %> years
+        </div>
+
+        <% if @coach_profile.hourly_rate.present? %>
+          <div class="mb-4">
+            <strong>Hourly rate:</strong>
+            <%= number_to_currency(@coach_profile.hourly_rate) %>
+          </div>
+        <% end %>
+
+        <%= link_to "Back to Coaches",
+            coach_profiles_path,
+            class: "btn btn-outline-secondary" %>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <h2>Services</h2>
+
+  <div class="row g-4 mt-2">
+
+    <% @services.each do |service| %>
+      <div class="col-md-6 col-lg-4">
+
+        <div class="card service-card h-100">
+          <div class="card-body">
+
+            <h5>
+              <%= service.title %>
+            </h5>
+
+            <p class="text-muted">
+              <%= service.category.name %>
+            </p>
+
+            <p>
+              <%= truncate(service.description, length: 120) %>
+            </p>
+
+            <p>
+              <strong>
+                <%= number_to_currency(service.price) %>
+              </strong>
+            </p>
+
+            <%= link_to "View Service",
+                service_path(service),
+                class: "btn btn-primary" %>
+
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+
+  </div>
+
+</div>

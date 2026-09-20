@@ -1,0 +1,525 @@
+<div class="container py-5">
+
+  <div class="d-flex flex-column flex-md-row
+              justify-content-between align-items-md-center
+              gap-3 mb-5">
+
+    <div>
+      <h1 class="h2 mb-1">
+        Coach Dashboard
+      </h1>
+
+      <p class="text-muted mb-0">
+        Welcome back,
+        <%= current_user.first_name %>.
+        Manage your tutoring business from here.
+      </p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+
+      <% if @coach_profile %>
+        <%= link_to edit_coach_profile_path(@coach_profile),
+            class: "btn btn-outline-primary" do %>
+          <i class="bi bi-pencil me-1"></i>
+          Edit Profile
+        <% end %>
+      <% end %>
+
+      <%= link_to bookings_path,
+          class: "btn btn-primary" do %>
+        <i class="bi bi-calendar3 me-1"></i>
+        View Bookings
+      <% end %>
+
+    </div>
+
+  </div>
+
+
+  <%# Statistics %>
+
+  <div class="row g-4 mb-5">
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-start">
+
+            <div>
+              <p class="text-muted mb-2">
+                Pending Requests
+              </p>
+
+              <h2 class="mb-0">
+                <%= @pending_bookings.count %>
+              </h2>
+            </div>
+
+            <i class="bi bi-hourglass-split fs-3 text-muted"></i>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-start">
+
+            <div>
+              <p class="text-muted mb-2">
+                Upcoming Sessions
+              </p>
+
+              <h2 class="mb-0">
+                <%= @upcoming_bookings.count %>
+              </h2>
+            </div>
+
+            <i class="bi bi-calendar-check fs-3 text-muted"></i>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-start">
+
+            <div>
+              <p class="text-muted mb-2">
+                Completed Sessions
+              </p>
+
+              <h2 class="mb-0">
+                <%= @completed_bookings.count %>
+              </h2>
+            </div>
+
+            <i class="bi bi-check-circle fs-3 text-muted"></i>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-start">
+
+            <div>
+              <p class="text-muted mb-2">
+                Services
+              </p>
+
+              <h2 class="mb-0">
+                <%= @coach_profile&.services&.count || 0 %>
+              </h2>
+            </div>
+
+            <i class="bi bi-journal-text fs-3 text-muted"></i>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="row g-4">
+
+    <%# Upcoming bookings %>
+
+    <div class="col-lg-8">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-center mb-4">
+
+            <div>
+              <h3 class="h5 mb-1">
+                Upcoming Sessions
+              </h3>
+
+              <p class="text-muted mb-0">
+                Your next confirmed student sessions.
+              </p>
+            </div>
+
+            <%= link_to "View All",
+                bookings_path,
+                class: "btn btn-sm btn-outline-secondary" %>
+
+          </div>
+
+
+          <% if @upcoming_bookings.any? %>
+
+            <div class="list-group list-group-flush">
+
+              <% @upcoming_bookings.first(5).each do |booking| %>
+
+                <%= link_to booking_path(booking),
+                    class: "list-group-item
+                            list-group-item-action
+                            px-0 py-3" do %>
+
+                  <div class="d-flex justify-content-between
+                              align-items-center gap-3">
+
+                    <div>
+
+                      <div class="fw-semibold">
+                        <%= booking.service.title %>
+                      </div>
+
+                      <small class="text-muted">
+                        <%= booking.student.first_name %>
+                        <%= booking.student.last_name %>
+                        ·
+                        <%= booking.start_time.strftime("%d %b %Y") %>
+                        ·
+                        <%= booking.start_time.strftime("%H:%M") %>
+                      </small>
+
+                    </div>
+
+                    <span class="badge bg-success">
+                      Confirmed
+                    </span>
+
+                  </div>
+
+                <% end %>
+
+              <% end %>
+
+            </div>
+
+          <% else %>
+
+            <div class="text-center py-5">
+
+              <i class="bi bi-calendar-check
+                        display-6 text-muted"></i>
+
+              <h4 class="h6 mt-3">
+                No upcoming sessions
+              </h4>
+
+              <p class="text-muted mb-0">
+                Confirmed student bookings will appear here.
+              </p>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <%# Coach profile %>
+
+    <div class="col-lg-4">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-body p-4">
+
+          <h3 class="h5 mb-4">
+            Your Profile
+          </h3>
+
+          <% if @coach_profile %>
+
+            <div class="text-center mb-4">
+
+              <% if current_user.avatar.attached? %>
+
+                <%= image_tag current_user.avatar,
+                    class: "rounded-circle mb-3",
+                    style: "width: 80px;
+                            height: 80px;
+                            object-fit: cover;",
+                    alt: current_user.first_name %>
+
+              <% else %>
+
+                <div class="rounded-circle bg-light
+                            d-inline-flex
+                            align-items-center
+                            justify-content-center
+                            mb-3"
+                     style="width: 80px; height: 80px;">
+
+                  <i class="bi bi-person fs-2 text-muted"></i>
+
+                </div>
+
+              <% end %>
+
+              <h4 class="h6 mb-1">
+                <%= current_user.first_name %>
+                <%= current_user.last_name %>
+              </h4>
+
+              <p class="text-muted small mb-0">
+                <%= @coach_profile.headline %>
+              </p>
+
+            </div>
+
+
+            <div class="border-top pt-3">
+
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">
+                  Services
+                </span>
+
+                <strong>
+                  <%= @coach_profile.services.count %>
+                </strong>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">
+                  Reviews
+                </span>
+
+                <strong>
+                  <%= @coach_profile.reviews_count %>
+                </strong>
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">
+                  Rating
+                </span>
+
+                <strong>
+                  <%= @coach_profile.average_rating %>
+                  <i class="bi bi-star-fill text-warning"></i>
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div class="mt-4">
+
+              <%= link_to "View Public Profile",
+                  coach_profile_path(@coach_profile),
+                  class: "btn btn-outline-primary
+                          btn-sm w-100" %>
+
+            </div>
+
+          <% else %>
+
+            <div class="text-center py-4">
+
+              <i class="bi bi-person-plus
+                        display-6 text-muted"></i>
+
+              <p class="text-muted mt-3">
+                You haven't created your coach profile yet.
+              </p>
+
+              <%= link_to "Create Coach Profile",
+                  new_coach_profile_path,
+                  class: "btn btn-primary btn-sm" %>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <%# My Services %>
+
+  <div class="card border-0 shadow-sm mt-4">
+
+    <div class="card-body p-4">
+
+      <div class="d-flex flex-column flex-md-row
+                  justify-content-between
+                  align-items-md-center
+                  gap-3 mb-4">
+
+        <div>
+          <h3 class="h5 mb-1">
+            My Services
+          </h3>
+
+          <p class="text-muted mb-0">
+            Manage the coaching services you offer to students.
+          </p>
+        </div>
+
+        <%= link_to new_service_path,
+            class: "btn btn-primary" do %>
+          <i class="bi bi-plus-lg me-1"></i>
+          Add Service
+        <% end %>
+
+      </div>
+
+
+      <% if @services.any? %>
+
+        <div class="table-responsive">
+
+          <table class="table align-middle mb-0">
+
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Category</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <% @services.each do |service| %>
+
+                <tr>
+
+                  <td>
+                    <%= link_to service.title,
+                        service_path(service),
+                        class: "fw-semibold text-decoration-none" %>
+                  </td>
+
+                  <td>
+                    <span class="text-muted">
+                      <%= service.category.name %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <%= service.duration %> min
+                  </td>
+
+                  <td class="fw-semibold">
+                    <%= number_to_currency(service.price) %>
+                  </td>
+
+                  <td>
+                    <% if service.active? %>
+                      <span class="badge bg-success-subtle text-success">
+                        Active
+                      </span>
+                    <% else %>
+                      <span class="badge bg-secondary-subtle text-secondary">
+                        Inactive
+                      </span>
+                    <% end %>
+                  </td>
+
+                  <td>
+                    <div class="d-flex justify-content-end gap-2">
+
+                      <%= link_to service_path(service),
+                          class: "btn btn-sm btn-outline-secondary",
+                          title: "View" do %>
+                        <i class="bi bi-eye"></i>
+                      <% end %>
+
+                      <%= link_to edit_service_path(service),
+                          class: "btn btn-sm btn-outline-primary",
+                          title: "Edit" do %>
+                        <i class="bi bi-pencil"></i>
+                      <% end %>
+
+                      <%= button_to service_path(service),
+                          method: :delete,
+                          class: "btn btn-sm btn-outline-danger",
+                          title: "Delete",
+                          form: {
+                            data: {
+                              turbo_confirm: "Are you sure you want to delete this service?"
+                            }
+                          } do %>
+                        <i class="bi bi-trash"></i>
+                      <% end %>
+
+                    </div>
+                  </td>
+
+                </tr>
+
+              <% end %>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      <% else %>
+
+        <div class="text-center py-5">
+
+          <i class="bi bi-journal-plus display-6 text-muted"></i>
+
+          <h4 class="h6 mt-3">
+            You haven't created any services yet.
+          </h4>
+
+          <p class="text-muted mb-3">
+            Create your first coaching service so students can book you.
+          </p>
+
+          <%= link_to "Create Your First Service",
+              new_service_path,
+              class: "btn btn-primary" %>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  </div>
+
+</div>

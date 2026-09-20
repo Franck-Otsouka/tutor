@@ -1,0 +1,193 @@
+<div class="container py-5">
+
+  <div class="d-flex flex-column flex-md-row
+              justify-content-between align-items-md-center
+              gap-3 mb-5">
+
+    <div>
+      <h1 class="h2 mb-1">
+        <%= current_user.coach? ? "Booking Requests" : "My Bookings" %>
+      </h1>
+
+      <p class="text-muted mb-0">
+        <% if current_user.coach? %>
+          Manage your upcoming and previous student sessions.
+        <% else %>
+          Manage your upcoming and previous tutoring sessions.
+        <% end %>
+      </p>
+    </div>
+
+    <% if current_user.student? %>
+      <%= link_to new_booking_path,
+          class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1"></i>
+        Book a Session
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <% if @bookings.any? %>
+
+    <div class="row g-4">
+
+      <% @bookings.each do |booking| %>
+
+        <div class="col-md-6 col-xl-4">
+
+          <div class="card h-100 border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+              <div class="d-flex justify-content-between
+                          align-items-start gap-3 mb-3">
+
+                <div>
+                  <h5 class="card-title mb-1">
+                    <%= booking.service.title %>
+                  </h5>
+
+                  <small class="text-muted">
+                    <%= booking.service.category.name %>
+                  </small>
+                </div>
+
+                <% if booking.pending? %>
+
+                  <span class="badge bg-warning text-dark">
+                    Pending
+                  </span>
+
+                <% elsif booking.confirmed? %>
+
+                  <span class="badge bg-success">
+                    Confirmed
+                  </span>
+
+                <% elsif booking.cancelled? %>
+
+                  <span class="badge bg-danger">
+                    Cancelled
+                  </span>
+
+                <% elsif booking.completed? %>
+
+                  <span class="badge bg-primary">
+                    Completed
+                  </span>
+
+                <% end %>
+
+              </div>
+
+              <hr>
+
+              <div class="mb-3">
+
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-person me-2 text-muted"></i>
+
+                  <span>
+                    <% if current_user.coach? %>
+                      <%= booking.student.first_name %>
+                      <%= booking.student.last_name %>
+                    <% else %>
+                      <%= booking.service.coach_profile.user.first_name %>
+                      <%= booking.service.coach_profile.user.last_name %>
+                    <% end %>
+                  </span>
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-calendar3 me-2 text-muted"></i>
+
+                  <span>
+                    <%= booking.start_time&.strftime("%d %B %Y") %>
+                  </span>
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-clock me-2 text-muted"></i>
+
+                  <span>
+                    <%= booking.start_time&.strftime("%H:%M") %>
+                    –
+                    <%= booking.end_time&.strftime("%H:%M") %>
+                  </span>
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-hourglass-split me-2 text-muted"></i>
+
+                  <span>
+                    <%= booking.service.duration %> minutes
+                  </span>
+                </div>
+
+              </div>
+
+              <div class="d-flex justify-content-between
+                          align-items-center mt-4">
+
+                <strong>
+                  <%= number_to_currency(booking.service.price) %>
+                </strong>
+
+                <%= link_to booking_path(booking),
+                    class: "btn btn-outline-primary btn-sm" do %>
+                  View Booking
+                  <i class="bi bi-arrow-right ms-1"></i>
+                <% end %>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  <% else %>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body text-center py-5">
+
+        <div class="mb-3">
+          <i class="bi bi-calendar-x display-4 text-muted"></i>
+        </div>
+
+        <% if current_user.coach? %>
+
+          <h3>No booking requests yet</h3>
+
+          <p class="text-muted mb-4">
+            New student bookings will appear here.
+          </p>
+
+        <% else %>
+
+          <h3>No bookings yet</h3>
+
+          <p class="text-muted mb-4">
+            Find a coach and book your first session.
+          </p>
+
+          <%= link_to coach_profiles_path,
+              class: "btn btn-primary" do %>
+            <i class="bi bi-search me-1"></i>
+            Browse Coaches
+          <% end %>
+
+        <% end %>
+
+      </div>
+    </div>
+
+  <% end %>
+
+</div>

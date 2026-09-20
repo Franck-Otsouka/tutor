@@ -1,0 +1,59 @@
+<div class="container py-5 student-profile-page">
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <div class="d-flex align-items-center gap-4">
+
+        <% if @student_profile.user.avatar.attached? %>
+          <%= image_tag @student_profile.user.avatar,
+              class: "profile-coach-avatar",
+              alt: @student_profile.user.first_name %>
+        <% else %>
+          <div class="profile-coach-avatar profile-coach-avatar-placeholder">
+            <i class="bi bi-person"></i>
+          </div>
+        <% end %>
+
+        <div>
+          <h1>
+            <%= @student_profile.user.first_name %>
+            <%= @student_profile.user.last_name %>
+          </h1>
+
+          <p class="text-muted mb-0">
+            Student
+          </p>
+        </div>
+
+      </div>
+
+      <hr>
+
+      <h4>About Me</h4>
+
+      <p>
+        <%= @student_profile.bio.presence ||
+            "No bio added yet." %>
+      </p>
+
+      <h4>Learning Goals</h4>
+
+      <p>
+        <%= @student_profile.learning_goals.presence ||
+            "No learning goals added yet." %>
+      </p>
+
+      <% if user_signed_in? &&
+            current_user == @student_profile.user %>
+
+        <%= link_to "Edit Profile",
+            edit_student_profile_path(@student_profile),
+            class: "btn btn-primary" %>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>

@@ -1,16 +1,326 @@
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>Tutor</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+
+    <%= javascript_include_tag "application",
+        "data-turbo-track": "reload",
+        type: "module" %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+
+        <!-- Brand -->
+        <%= link_to "Tutor",
+            root_path,
+            class: "navbar-brand fw-bold" %>
+
+        <!-- Mobile Toggle -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavigation"
+          aria-controls="mainNavigation"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation -->
+        <div class="collapse navbar-collapse" id="mainNavigation">
+
+          <!-- Main Navigation -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <%= link_to "Home",
+                  root_path,
+                  class: "nav-link" %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to "Coaches",
+                  coach_profiles_path,
+                  class: "nav-link" %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to "Categories",
+                  categories_path,
+                  class: "nav-link" %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to "Services",
+                  services_path,
+                  class: "nav-link" %>
+            </li>
+
+          </ul>
+
+          <!-- User Navigation -->
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+
+            <% if user_signed_in? %>
+
+              <!-- Become a Coach -->
+              <% if current_user.student? %>
+
+                <li class="nav-item me-lg-4">
+                  <%= link_to "Become a Coach",
+                      new_coach_profile_path,
+                      class: "btn btn-dark btn-sm px-3 border border-light" %>
+                </li>
+
+              <% end %>
+
+              <!-- User Avatar Dropdown -->
+              <li class="nav-item dropdown">
+
+                <a
+                  class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                  href="#"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+
+                  <% if current_user.avatar.attached? %>
+
+                    <%= image_tag current_user.avatar,
+                        class: "navbar-avatar",
+                        alt: "#{current_user.first_name} #{current_user.last_name}" %>
+
+                  <% else %>
+
+                    <span class="navbar-avatar navbar-avatar-placeholder">
+                      <i class="bi bi-person"></i>
+                    </span>
+
+                  <% end %>
+
+                  <span class="d-none d-lg-inline">
+                    <%= current_user.first_name.presence ||
+                        current_user.email.split("@").first %>
+                  </span>
+
+                </a>
+
+                <!-- Dropdown Menu -->
+                <ul class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="userDropdown">
+
+                  <!-- User Information -->
+                  <li class="px-3 py-2">
+
+                    <div class="fw-semibold">
+                      <%= current_user.first_name %>
+                      <%= current_user.last_name %>
+                    </div>
+
+                    <small class="text-muted">
+                      <%= current_user.email %>
+                    </small>
+
+                    <% if current_user.role.present? %>
+
+                      <div class="mt-1">
+                        <span class="badge bg-secondary text-capitalize">
+                          <%= current_user.role %>
+                        </span>
+                      </div>
+
+                    <% end %>
+
+                  </li>
+
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+
+                  <!-- Admin Navigation -->
+                  <% if current_user.admin? %>
+
+                    <li>
+                      <%= link_to "Admin Dashboard",
+                          "#",
+                          class: "dropdown-item fw-semibold" %>
+                    </li>
+
+                  <!-- Coach Navigation -->
+                  <% elsif current_user.coach? %>
+
+                    <li>
+                      <%= link_to "Coach Dashboard",
+                          coach_dashboard_path,
+                          class: "dropdown-item fw-semibold" %>
+                    </li>
+
+                    <% if current_user.admin? %>
+
+
+
+  <li>
+    <%= link_to "My Coach Profile",
+        coach_profile_path(current_user.coach_profile),
+        class: "dropdown-item" %>
+  </li>
+
+  <li>
+    <%= link_to "Edit Coach Profile",
+        edit_coach_profile_path(current_user.coach_profile),
+        class: "dropdown-item" %>
+  </li>
+
+<% elsif current_user.student? %>
+
+  <% if current_user.student_profile&.persisted? %>
+
+    <li>
+      <%= link_to "My Student Profile",
+          student_profile_path(current_user.student_profile),
+          class: "dropdown-item" %>
+    </li>
+
+    <li>
+      <%= link_to "Edit Student Profile",
+          edit_student_profile_path(current_user.student_profile),
+          class: "dropdown-item" %>
+    </li>
+
+  <% end %>
+
+<% end %>
+
+                  <!-- Student Navigation -->
+                  <% elsif current_user.student? %>
+
+                    <% if current_user.student_profile&.persisted? %>
+
+                      <li>
+                        <%= link_to "My Student Profile",
+                            student_profile_path(current_user.student_profile),
+                            class: "dropdown-item" %>
+                      </li>
+
+                      <li>
+                        <%= link_to "Edit Student Profile",
+                            edit_student_profile_path(current_user.student_profile),
+                            class: "dropdown-item" %>
+                      </li>
+
+                    <% end %>
+
+                  <% end %>
+
+                  <!-- Sign Out -->
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+
+                  <li>
+                    <%= button_to "Sign out",
+                        destroy_user_session_path,
+                        method: :delete,
+                        class: "dropdown-item text-danger" %>
+                  </li>
+
+                </ul>
+
+              </li>
+
+            <% else %>
+
+              <!-- Guest Navigation -->
+              <li class="nav-item">
+                <%= link_to "Sign in",
+                    new_user_session_path,
+                    class: "nav-link" %>
+              </li>
+
+              <li class="nav-item ms-lg-2">
+                <%= link_to "Sign up",
+                    new_user_registration_path,
+                    class: "btn btn-primary btn-sm mt-1" %>
+              </li>
+
+            <% end %>
+
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <% if notice.present? %>
+
+      <div class="container mt-3">
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+          <%= notice %>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+          </button>
+
+        </div>
+      </div>
+
+    <% end %>
+
+    <% if alert.present? %>
+
+      <div class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+          <%= alert %>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close">
+          </button>
+
+        </div>
+      </div>
+
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+      <div class="container text-center">
+
+        <p class="mb-0">
+          © <%= Time.current.year %> Tutor. Learn. Teach. Grow.
+        </p>
+
+      </div>
+    </footer>
+
   </body>
 </html>

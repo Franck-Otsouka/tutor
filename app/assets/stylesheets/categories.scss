@@ -1,0 +1,38 @@
+.categories-page {
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .category-card {
+    height: 100%;
+    border: 0;
+    border-radius: 16px;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .category-name {
+    font-weight: 600;
+  }
+
+  .category-count {
+    color: #6c757d;
+    font-size: 0.95rem;
+  }
+
+  .service-card {
+    height: 100%;
+    border: 0;
+    border-radius: 14px;
+  }
+
+  .service-card .card-body {
+    padding: 1.5rem;
+  }
+}

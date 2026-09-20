@@ -1,0 +1,51 @@
+<div class="container py-5 services-page service-show">
+  <div class="row">
+   <div class="col-lg-8 service-content">
+      <span class="badge bg-secondary mb-3 service-category">
+        <%= @service.category.name %>
+      </span>
+
+     <h1 class="service-title"><%= @service.title %></h1>
+      <p class="lead service-description">
+        <%= @service.description %>
+      </p>
+
+      <hr>
+
+      <p>
+        <strong>Coach:</strong>
+        <%= link_to "#{@service.coach_profile.user.first_name} #{@service.coach_profile.user.last_name}",
+            coach_profile_path(@service.coach_profile) %>
+      </p>
+
+      <p>
+        <strong>Duration:</strong>
+        <%= @service.duration %> minutes
+      </p>
+
+      <p class="service-price-large">
+          <strong>Price:</strong>
+        <%= number_to_currency(@service.price) %>
+      </p>
+
+      <div class="mt-4">
+  <% if user_signed_in? %>
+    <% if current_user.student? %>
+      <%= link_to "Book This Service",
+          new_booking_path(service_id: @service.id),
+          class: "btn btn-primary btn-lg" %>
+    <% else %>
+      <span class="text-muted">
+        Only students can book services.
+      </span>
+    <% end %>
+  <% else %>
+    <%= link_to "Sign in to Book",
+        new_user_session_path,
+        class: "btn btn-primary btn-lg" %>
+  <% end %>
+</div>
+      </div>
+    </div>
+  </div>
+</div>

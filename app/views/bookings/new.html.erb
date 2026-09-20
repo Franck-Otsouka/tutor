@@ -1,0 +1,99 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <%= link_to "← Back to Service",
+        @booking.service ? service_path(@booking.service) : services_path,
+        class: "text-decoration-none" %>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="mb-4">
+            <h1 class="h2 mb-2">Book a Session</h1>
+            <p class="text-muted mb-0">
+              Choose a date and time for your session.
+            </p>
+          </div>
+
+          <% if @booking.service %>
+            <div class="bg-light rounded-3 p-3 mb-4">
+              <h5 class="mb-1">
+                <%= @booking.service.title %>
+              </h5>
+
+              <p class="text-muted mb-1">
+                with
+                <%= @booking.service.coach_profile.user.first_name %>
+                <%= @booking.service.coach_profile.user.last_name %>
+              </p>
+
+              <small class="text-muted">
+                <%= @booking.service.duration %> minutes
+                ·
+                <%= number_to_currency(@booking.service.price) %>
+              </small>
+            </div>
+          <% end %>
+
+         <div data-controller="booking"
+     data-duration="<%= @booking.service&.duration || 0 %>">
+
+  <%= form_with model: @booking, local: true do |form| %>
+
+            <% if @booking.errors.any? %>
+              <div class="alert alert-danger">
+                <h6 class="alert-heading">
+                  Please correct the following:
+                </h6>
+
+                <ul class="mb-0">
+                  <% @booking.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= form.hidden_field :service_id %>
+
+            <div class="mb-4">
+                  <%= form.label :start_time,
+                      "Start date and time",
+                      class: "form-label fw-semibold" %>
+
+                  <%= form.datetime_local_field :start_time,
+                      class: "form-control",
+                      required: true,
+                      data: {
+                        booking_target: "startTime",
+                        action: "change->booking#updateEndTime input->booking#updateEndTime"
+                      } %>
+                </div>
+
+                <div class="alert alert-light border mb-4">
+                  <i class="bi bi-clock me-2"></i>
+
+                  This session lasts
+                  <strong><%= @booking.service&.duration || 0 %> minutes</strong>.
+
+                  <div data-booking-target="endTimePreview"
+                      class="mt-2 fw-semibold">
+                  </div>
+                </div>
+
+            <div class="d-flex gap-2">
+              <%= form.submit "Confirm Booking",
+                  class: "btn btn-primary btn-lg" %>
+
+              <%= link_to "Cancel",
+                  @booking.service ? service_path(@booking.service) : services_path,
+                  class: "btn btn-outline-secondary btn-lg" %>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

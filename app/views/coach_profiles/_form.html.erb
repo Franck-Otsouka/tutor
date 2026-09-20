@@ -1,0 +1,125 @@
+
+<%= form_with model: coach_profile do |form| %>
+
+  <% if coach_profile.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% coach_profile.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Personal Information -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+
+      <h4 class="mb-4">Personal Information</h4>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <%= label_tag :first_name, "First name", class: "form-label" %>
+
+          <%= text_field_tag :first_name,
+              coach_profile.user.first_name,
+              class: "form-control",
+              autocomplete: "given-name" %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= label_tag :last_name, "Last name", class: "form-label" %>
+
+          <%= text_field_tag :last_name,
+              coach_profile.user.last_name,
+              class: "form-control",
+              autocomplete: "family-name" %>
+        </div>
+
+      </div>
+
+      <div class="mb-3">
+
+        <%= label_tag :avatar, "Profile photo", class: "form-label" %>
+
+        <% if coach_profile.user.avatar.attached? %>
+          <div class="mb-3">
+            <%= image_tag coach_profile.user.avatar,
+                class: "navbar-avatar",
+                alt: "#{coach_profile.user.first_name} #{coach_profile.user.last_name}" %>
+          </div>
+        <% end %>
+
+        <%= file_field_tag :avatar,
+            class: "form-control",
+            accept: "image/png,image/jpeg,image/webp" %>
+
+        <div class="form-text">
+          Upload a JPG, PNG, or WebP image.
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Coach Information -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+
+      <h4 class="mb-4">Coach Information</h4>
+
+      <div class="mb-3">
+        <%= form.label :headline, class: "form-label" %>
+
+        <%= form.text_field :headline,
+            class: "form-control",
+            placeholder: "e.g. Full-Stack Web Development Coach" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, class: "form-label" %>
+
+        <%= form.text_area :description,
+            rows: 5,
+            class: "form-control",
+            placeholder: "Tell students about your experience and teaching approach..." %>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <%= form.label :hourly_rate, class: "form-label" %>
+
+          <%= form.number_field :hourly_rate,
+              step: 0.01,
+              min: 0,
+              class: "form-control" %>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <%= form.label :years_experience, class: "form-label" %>
+
+          <%= form.number_field :years_experience,
+              min: 0,
+              class: "form-control" %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+
+    <%= form.submit "Save Changes",
+        class: "btn btn-primary" %>
+
+    <%= link_to "Cancel",
+        coach_profile_path(coach_profile),
+        class: "btn btn-outline-secondary" %>
+
+  </div>
+
+<% end %>

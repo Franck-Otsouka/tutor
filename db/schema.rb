@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
     t.datetime "end_time"
     t.bigint "service_id", null: false
     t.datetime "start_time"
-    t.string "status"
+    t.string "status", default: "pending"
     t.bigint "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_bookings_on_service_id"
@@ -117,6 +117,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "coach_profile_id", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "rating"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["coach_profile_id"], name: "index_reviews_on_coach_profile_id"
+    t.index ["user_id", "coach_profile_id"], name: "index_reviews_on_user_id_and_coach_profile_id", unique: true
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "services", force: :cascade do |t|
     t.boolean "active"
     t.bigint "category_id", null: false
@@ -140,6 +152,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
     t.datetime "updated_at", null: false
     t.integer "visibility"
     t.index ["coach_profile_id"], name: "index_streams_on_coach_profile_id"
+  end
+
+  create_table "student_profiles", force: :cascade do |t|
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.text "learning_goals"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_student_profiles_on_user_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -191,9 +212,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_062241) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "posts", "community_groups"
   add_foreign_key "posts", "users"
+  add_foreign_key "reviews", "coach_profiles"
+  add_foreign_key "reviews", "users"
   add_foreign_key "services", "categories"
   add_foreign_key "services", "coach_profiles"
   add_foreign_key "streams", "coach_profiles"
+  add_foreign_key "student_profiles", "users"
   add_foreign_key "subscriptions", "membership_plans"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "videos", "coach_profiles"

@@ -1,0 +1,163 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <%= link_to "← Back to Bookings",
+        bookings_path,
+        class: "text-decoration-none" %>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h1 class="h3 mb-1">
+                <%= @booking.service.title %>
+              </h1>
+
+              <p class="text-muted mb-0">
+                with
+                <%= @booking.service.coach_profile.user.first_name %>
+                <%= @booking.service.coach_profile.user.last_name %>
+              </p>
+            </div>
+
+            <% if @booking.pending? %>
+              <span class="badge bg-warning text-dark">
+                Pending
+              </span>
+            <% elsif @booking.confirmed? %>
+              <span class="badge bg-success">
+                Confirmed
+              </span>
+            <% elsif @booking.cancelled? %>
+              <span class="badge bg-danger">
+                Cancelled
+              </span>
+            <% elsif @booking.completed? %>
+              <span class="badge bg-primary">
+                Completed
+              </span>
+            <% end %>
+          </div>
+
+          <hr>
+
+          <div class="row g-4">
+
+            <div class="col-md-6">
+              <h6 class="text-muted">Student</h6>
+
+              <p class="mb-0">
+                <i class="bi bi-person me-2"></i>
+                <%= @booking.student.first_name %>
+                <%= @booking.student.last_name %>
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="text-muted">Service</h6>
+
+              <p class="mb-0">
+                <i class="bi bi-book me-2"></i>
+                <%= @booking.service.title %>
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="text-muted">Date</h6>
+
+              <p class="mb-0">
+                <i class="bi bi-calendar3 me-2"></i>
+                <%= @booking.start_time&.strftime("%A, %d %B %Y") %>
+              </p>
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="text-muted">Time</h6>
+
+              <p class="mb-0">
+                <i class="bi bi-clock me-2"></i>
+                <%= @booking.start_time&.strftime("%H:%M") %>
+                –
+                <%= @booking.end_time&.strftime("%H:%M") %>
+              </p>
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <% if current_user.coach? &&
+                @booking.service.coach_profile&.user_id == current_user.id %>
+
+            <div>
+              <h5 class="mb-3">Manage Booking</h5>
+
+              <div class="d-flex flex-wrap gap-2">
+
+                <% if @booking.pending? %>
+
+                  <%= button_to "Confirm Booking",
+                      confirm_booking_path(@booking),
+                      method: :patch,
+                      class: "btn btn-success" %>
+
+                  <%= button_to "Cancel Booking",
+                      cancel_booking_path(@booking),
+                      method: :patch,
+                      data: {
+                        turbo_confirm: "Are you sure you want to cancel this booking?"
+                      },
+                      class: "btn btn-outline-danger" %>
+
+                <% elsif @booking.confirmed? %>
+
+                  <%= button_to "Mark as Completed",
+                      complete_booking_path(@booking),
+                      method: :patch,
+                      class: "btn btn-primary" %>
+
+                  <%= button_to "Cancel Booking",
+                      cancel_booking_path(@booking),
+                      method: :patch,
+                      data: {
+                        turbo_confirm: "Are you sure you want to cancel this booking?"
+                      },
+                      class: "btn btn-outline-danger" %>
+
+                <% end %>
+
+              </div>
+            </div>
+
+          <% elsif @booking.student == current_user %>
+
+            <div class="d-flex flex-wrap gap-2">
+
+              <% if @booking.pending? || @booking.confirmed? %>
+
+                <%= link_to "Edit Booking",
+                    edit_booking_path(@booking),
+                    class: "btn btn-outline-primary" %>
+
+                <%= button_to "Cancel Booking",
+                    booking_path(@booking),
+                    method: :delete,
+                    data: {
+                      turbo_confirm: "Are you sure you want to cancel this booking?"
+                    },
+                    class: "btn btn-outline-danger" %>
+
+              <% end %>
+
+            </div>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

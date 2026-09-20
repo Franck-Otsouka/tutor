@@ -1,0 +1,2 @@
+module CoachDashboardHelper
+end
