@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
+  user: two
   community_group: one
-  content: MyText
+  content: Coach post for testing
 
 two:
   user: two
   community_group: two
-  content: MyText
+  content: Another coach post for testing

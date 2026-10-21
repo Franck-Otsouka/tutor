@@ -1,0 +1,13 @@
+one:
+  user: two
+  title: MyString
+  content: MyText
+  visibility: 0
+  content_type: 0
+
+two:
+  user: two
+  title: Another Content
+  content: Another text
+  visibility: 1
+  content_type: 1

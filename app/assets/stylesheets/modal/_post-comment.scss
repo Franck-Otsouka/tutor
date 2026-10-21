@@ -1,0 +1,23 @@
+.comments-modal {
+  --bs-modal-width: 420px;
+  padding: 0 !important;
+}
+
+.comments-modal .modal-dialog {
+  margin: 0 0 0 auto;
+  max-width: 420px;
+  height: 100vh;
+}
+
+.comments-modal .modal-content {
+  height: 100%;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.comments-modal .modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}

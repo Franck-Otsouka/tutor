@@ -15,7 +15,7 @@
         type: "module" %>
   </head>
 
-  <body class="bg-light">
+  <body>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -45,32 +45,49 @@
           <!-- Main Navigation -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-            <li class="nav-item">
-              <%= link_to "Home",
-                  root_path,
-                  class: "nav-link" %>
-            </li>
+  <!-- Home -->
+  <li class="nav-item me-lg-2">
+    <%= link_to "Home",
+        root_path,
+        class: "nav-link" %>
+  </li>
 
-            <li class="nav-item">
-              <%= link_to "Coaches",
-                  coach_profiles_path,
-                  class: "nav-link" %>
-            </li>
+  <!-- Feed -->
+  <li class="nav-item me-lg-2">
+    <%= link_to feed_path,
+        class: "nav-link d-flex align-items-center gap-2" do %>
 
-            <li class="nav-item">
-              <%= link_to "Categories",
-                  categories_path,
-                  class: "nav-link" %>
-            </li>
+      <span>Feed</span>
 
-            <li class="nav-item">
-              <%= link_to "Services",
-                  services_path,
-                  class: "nav-link" %>
-            </li>
+      <span class="badge bg-primary">
+        New
+      </span>
 
-          </ul>
+    <% end %>
+  </li>
 
+  <!-- Coaches -->
+  <li class="nav-item me-lg-2">
+    <%= link_to "Coaches",
+        coach_profiles_path,
+        class: "nav-link" %>
+  </li>
+
+  <!-- Categories -->
+  <li class="nav-item me-lg-2">
+    <%= link_to "Categories",
+        categories_path,
+        class: "nav-link" %>
+  </li>
+
+  <!-- Services -->
+  <li class="nav-item">
+    <%= link_to "Services",
+        services_path,
+        class: "nav-link" %>
+  </li>
+
+</ul>
           <!-- User Navigation -->
           <ul class="navbar-nav ms-auto align-items-lg-center">
 

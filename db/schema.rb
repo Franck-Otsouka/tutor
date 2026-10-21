@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_27_144704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,48 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "classroom_memberships", force: :cascade do |t|
+    t.bigint "classroom_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["classroom_id"], name: "index_classroom_memberships_on_classroom_id"
+    t.index ["user_id", "classroom_id"], name: "index_classroom_memberships_on_user_id_and_classroom_id", unique: true
+    t.index ["user_id"], name: "index_classroom_memberships_on_user_id"
+  end
+
+  create_table "classrooms", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name"
+    t.boolean "private", default: true
+    t.bigint "representative_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["representative_id"], name: "index_classrooms_on_representative_id"
+  end
+
+  create_table "coach_content_likes", force: :cascade do |t|
+    t.bigint "coach_content_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["coach_content_id"], name: "index_coach_content_likes_on_coach_content_id"
+    t.index ["user_id", "coach_content_id"], name: "index_coach_content_likes_on_user_id_and_coach_content_id", unique: true
+    t.index ["user_id"], name: "index_coach_content_likes_on_user_id"
+  end
+
+  create_table "coach_contents", force: :cascade do |t|
+    t.text "content"
+    t.integer "content_type"
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "views_count", default: 0, null: false
+    t.integer "visibility"
+    t.index ["user_id"], name: "index_coach_contents_on_user_id"
+  end
+
   create_table "coach_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -73,11 +115,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
   end
 
   create_table "comments", force: :cascade do |t|
+    t.bigint "coach_content_id"
     t.text "content"
     t.datetime "created_at", null: false
-    t.bigint "post_id", null: false
+    t.bigint "post_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["coach_content_id"], name: "index_comments_on_coach_content_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -90,21 +134,45 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "community_post_replies", force: :cascade do |t|
+    t.bigint "community_post_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["community_post_id"], name: "index_community_post_replies_on_community_post_id"
+    t.index ["user_id"], name: "index_community_post_replies_on_user_id"
+  end
+
+  create_table "community_posts", force: :cascade do |t|
+    t.bigint "community_group_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.string "link_url"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["community_group_id"], name: "index_community_posts_on_community_group_id"
+    t.index ["user_id"], name: "index_community_posts_on_user_id"
+  end
+
   create_table "group_memberships", force: :cascade do |t|
     t.bigint "community_group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["community_group_id"], name: "index_group_memberships_on_community_group_id"
+    t.index ["user_id", "community_group_id"], name: "index_group_memberships_on_user_and_community", unique: true
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
   end
 
   create_table "membership_plans", force: :cascade do |t|
+    t.bigint "coach_profile_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
     t.decimal "monthly_price"
     t.string "name"
     t.datetime "updated_at", null: false
+    t.index ["coach_profile_id"], name: "index_membership_plans_on_coach_profile_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -205,11 +273,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_071118) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "services"
   add_foreign_key "bookings", "users", column: "student_id"
+  add_foreign_key "classroom_memberships", "classrooms"
+  add_foreign_key "classroom_memberships", "users"
+  add_foreign_key "classrooms", "users", column: "representative_id"
+  add_foreign_key "coach_content_likes", "coach_contents"
+  add_foreign_key "coach_content_likes", "users"
+  add_foreign_key "coach_contents", "users"
   add_foreign_key "coach_profiles", "users"
+  add_foreign_key "comments", "coach_contents"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "community_post_replies", "community_posts"
+  add_foreign_key "community_post_replies", "users"
+  add_foreign_key "community_posts", "community_groups"
+  add_foreign_key "community_posts", "users"
   add_foreign_key "group_memberships", "community_groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "membership_plans", "coach_profiles"
   add_foreign_key "posts", "community_groups"
   add_foreign_key "posts", "users"
   add_foreign_key "reviews", "coach_profiles"

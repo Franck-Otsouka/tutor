@@ -4,28 +4,33 @@ class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :edit, :update, :destroy]
   before_action :authorize_owner!, only: [:edit, :update, :destroy]
 
- def index
-   @categories = Category.order(:name)
+  def index
+    @categories = Category.order(:name)
 
-   @services = Service
-   .where(active: true)
-   .includes(:category, coach_profile: :user )
+  @services = Service
+    .where(active: true)
+    .includes(:category, coach_profile: :user)
 
-   if params[:category_id].present?
-     @services = @services.where(category_id: params[:category_id])
-   end
+  if params[:category_id].present?
+    @services = @services.where(
+      category_id: params[:category_id]
+    )
+  end
 
-   if params[:query].present?
-     query = "%#{params[:query]}%"
+  if params[:query].present?
+    query = "%#{params[:query]}%"
 
-     @services = @services.where(
+    @services = @services.where(
       "services.title ILIKE :query OR services.description ILIKE :query",
       query: query
-     )
-   end
+    )
+  end
 
-   @services = @services.order(:title)
- end
+    @services = @services
+      .order(:title)
+      .page(params[:page])
+      .per(12)
+  end
 
   def show
   end

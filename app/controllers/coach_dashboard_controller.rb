@@ -25,6 +25,20 @@ class CoachDashboardController < ApplicationController
       &.services
       &.includes(:category)
       &.order(created_at: :desc) || []
+
+    @community_groups = CommunityGroup
+      .order(created_at: :desc)
+
+    @recent_posts = Post
+      .where(user: current_user)
+      .includes(:community_group)
+      .order(created_at: :desc)
+      .limit(5)
+
+    @coach_contents = current_user
+      .coach_contents
+      .order(created_at: :desc)
+      .limit(5)
   end
 
   private

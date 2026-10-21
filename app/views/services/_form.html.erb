@@ -46,6 +46,14 @@
     <%= form.label :active, "Active", class: "form-check-label" %>
   </div>
 
-  <%= form.submit class: "btn btn-primary" %>
+  <div class="d-flex justify-content-end gap-2">
+    <%= link_to "Cancel",
+        services_path,
+        class: "btn btn-outline-secondary" %>
+
+      <%= form.submit "Create Service",
+      class: "btn btn-primary" %>
+
+  </div>
 
 <% end %>

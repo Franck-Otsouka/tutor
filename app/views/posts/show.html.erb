@@ -1,0 +1,142 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <%= link_to "← Back to #{@community_group.name}",
+        community_group_posts_path(@community_group),
+        class: "text-decoration-none" %>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body p-4 p-md-5">
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+          <strong><%= @post.user.email %></strong>
+
+          <div class="small text-muted">
+            <%= @post.created_at.strftime("%d %b %Y, %H:%M") %>
+          </div>
+        </div>
+
+        <% if @post.user == current_user && current_user.coach? %>
+          <div class="d-flex gap-2">
+            <%= link_to "Edit",
+                edit_community_group_post_path(
+                  @community_group,
+                  @post
+                ),
+                class: "btn btn-outline-secondary btn-sm" %>
+
+            <%= button_to "Delete",
+                community_group_post_path(
+                  @community_group,
+                  @post
+                ),
+                method: :delete,
+                class: "btn btn-outline-danger btn-sm",
+                form: {
+                  data: {
+                    turbo_confirm: "Delete this post?"
+                  }
+                } %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="fs-5">
+        <%= simple_format(@post.content) %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="fw-bold">
+      Comments
+      <span class="text-muted fs-6">
+        (<%= @comments.count %>)
+      </span>
+    </h3>
+  </div>
+
+  <% if user_signed_in? %>
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-semibold mb-3">Leave a comment</h5>
+
+        <%= form_with model: Comment.new,
+            url: comments_path,
+            local: true do |form| %>
+
+          <%= form.hidden_field :post_id, value: @post.id %>
+
+          <div class="mb-3">
+            <%= form.text_area :content,
+                class: "form-control",
+                rows: 4,
+                placeholder: "Write your comment..." %>
+          </div>
+
+          <%= form.submit "Comment",
+              class: "btn btn-dark" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @comments.any? %>
+    <div class="d-flex flex-column gap-3">
+      <% @comments.each do |comment| %>
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between mb-2">
+              <strong><%= comment.user.email %></strong>
+
+              <small class="text-muted">
+                <%= time_ago_in_words(comment.created_at) %> ago
+              </small>
+            </div>
+
+            <%= simple_format(comment.content) %>
+
+            <% if comment.user == current_user %>
+  <div class="mt-3 d-flex gap-2">
+    <%= link_to "Edit",
+        "#edit-comment-#{comment.id}",
+        class: "btn btn-sm btn-outline-secondary" %>
+
+    <%= button_to "Delete",
+        comment_path(comment),
+        method: :delete,
+        class: "btn btn-sm btn-outline-danger",
+        form: {
+          data: {
+            turbo_confirm: "Delete this comment?"
+          }
+        } %>
+  </div>
+
+  <div id="edit-comment-<%= comment.id %>" class="mt-3">
+    <%= form_with model: comment,
+        url: comment_path(comment),
+        method: :patch,
+        local: true do |form| %>
+
+      <div class="mb-2">
+        <%= form.text_area :content,
+            class: "form-control",
+            rows: 3 %>
+      </div>
+
+      <%= form.submit "Update Comment",
+          class: "btn btn-sm btn-dark" %>
+    <% end %>
+  </div>
+<% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-4">
+      <p class="text-muted">No comments yet.</p>
+    </div>
+  <% end %>
+</div>

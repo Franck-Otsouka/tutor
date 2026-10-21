@@ -1,0 +1,67 @@
+<div class="devise-page">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+    <div class="card devise-card">
+      <div class="card-body p-4 p-md-5">
+
+        <div class="text-center mb-4">
+          <div class="bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 devise-icon">
+            <i class="bi bi-envelope-check-fill fs-3"></i>
+          </div>
+
+          <h2 class="devise-title mb-2">
+            Confirm your account
+          </h2>
+
+          <p class="text-muted mb-0">
+            Enter your email and we'll send you new confirmation instructions.
+          </p>
+        </div>
+
+        <%= form_for(
+          resource,
+          as: resource_name,
+          url: confirmation_path(resource_name),
+          html: { method: :post }
+        ) do |f| %>
+
+          <%= render "devise/shared/error_messages",
+              resource: resource %>
+
+          <div class="mb-4">
+            <%= f.label :email,
+                class: "form-label fw-semibold" %>
+
+            <%= f.email_field :email,
+                autofocus: true,
+                autocomplete: "email",
+                value: (
+                  resource.pending_reconfirmation? ?
+                  resource.unconfirmed_email :
+                  resource.email
+                ),
+                class: "form-control form-control-lg",
+                placeholder: "Enter your email" %>
+          </div>
+
+          <div class="d-grid">
+            <%= f.submit "Resend confirmation instructions",
+                class: "btn btn-dark btn-lg rounded-3" %>
+          </div>
+
+        <% end %>
+
+        <hr class="my-4">
+
+        <div class="text-center devise-links">
+          <%= render "devise/shared/links" %>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+  </div>
+</div>

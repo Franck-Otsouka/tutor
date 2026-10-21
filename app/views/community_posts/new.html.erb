@@ -1,0 +1,94 @@
+<div class="container py-5">
+
+  <div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+      <div class="mb-4">
+
+        <%= link_to "← Back to Hub",
+            community_group_community_posts_path(@community_group),
+            class: "text-decoration-none" %>
+
+      </div>
+
+      <div class="card border-0 shadow-sm">
+
+        <div class="card-body p-4">
+
+          <h2 class="fw-bold mb-3">
+            Create Community Post
+          </h2>
+
+          <p class="text-muted mb-4">
+            Share a question, resource, link or photo with the community.
+          </p>
+
+          <%= form_with model: [@community_group, @community_post],
+              local: true do |form| %>
+
+            <% if @community_post.errors.any? %>
+
+              <div class="alert alert-danger">
+
+                <ul class="mb-0">
+
+                  <% @community_post.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+
+                </ul>
+
+              </div>
+
+            <% end %>
+
+            <div class="mb-3">
+
+              <%= form.label :content,
+                  class: "form-label fw-semibold" %>
+
+              <%= form.text_area :content,
+                  rows: 6,
+                  class: "form-control",
+                  placeholder: "What's on your mind?" %>
+
+            </div>
+
+            <div class="mb-3">
+
+              <%= form.label :link_url,
+                  "Link (optional)",
+                  class: "form-label fw-semibold" %>
+
+              <%= form.url_field :link_url,
+                  class: "form-control",
+                  placeholder: "https://example.com" %>
+
+            </div>
+
+            <div class="mb-4">
+
+              <%= form.label :media,
+                  "Photo (optional)",
+                  class: "form-label fw-semibold" %>
+
+              <%= form.file_field :media,
+                  class: "form-control" %>
+
+            </div>
+
+            <%= form.submit "Publish Post",
+                class: "btn btn-primary" %>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

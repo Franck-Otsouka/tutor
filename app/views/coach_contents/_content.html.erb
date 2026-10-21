@@ -1,0 +1,318 @@
+<div class="card h-100 coach-content-card">
+
+  <% locked = content.members_only? && !member %>
+
+  <% if locked %>
+
+    <div class="card-body text-center py-5">
+      <div class="mb-3">
+        <i class="bi bi-lock-fill display-4 text-muted"></i>
+      </div>
+
+      <h5 class="card-title">
+        <%= content.title %>
+      </h5>
+
+      <p class="text-muted mb-3">
+        This content is available to members only.
+      </p>
+
+      <span class="badge bg-warning text-dark">
+        Members Only
+      </span>
+    </div>
+
+  <% else %>
+
+    <div class="card-body">
+
+  <!-- Coach profile -->
+  <%= link_to coach_profile_path(content.user.coach_profile),
+      class: "text-decoration-none text-dark d-flex align-items-center mb-3" do %>
+
+    <% if content.user.avatar.attached? %>
+
+      <%= image_tag content.user.avatar,
+          class: "rounded-circle me-2",
+          width: 45,
+          height: 45,
+          alt: "#{content.user.first_name} #{content.user.last_name}" %>
+
+    <% else %>
+
+      <div class="rounded-circle bg-secondary text-white
+                  d-flex align-items-center justify-content-center me-2"
+           style="width: 45px; height: 45px;">
+
+        <i class="bi bi-person"></i>
+
+      </div>
+
+    <% end %>
+
+    <div>
+      <div class="fw-semibold">
+        <%= content.user.first_name.presence || content.user.email.split("@").first %>
+        <%= content.user.last_name %>
+      </div>
+
+        <small class="text-muted">
+          Coach
+        </small>
+      </div>
+
+        <% end %>
+
+
+        <!-- Content title -->
+        <div class="d-flex justify-content-between align-items-start mb-3">
+
+          <h5 class="card-title mb-0">
+            <%= content.title %>
+          </h5>
+
+        <% if content.public_content? %>
+          <span class="badge bg-success">
+            Public
+          </span>
+        <% else %>
+          <span class="badge bg-warning text-dark">
+            Members Only
+          </span>
+        <% end %>
+
+      </div>
+
+      <% if content.content.present? %>
+        <p class="card-text">
+          <%= simple_format(content.content) %>
+        </p>
+      <% end %>
+
+      <% if content.media.attached? %>
+
+        <% if content.photo? %>
+
+          <%= image_tag content.media,
+              class: "img-fluid rounded mb-3",
+              alt: content.title %>
+
+        <% elsif content.video? %>
+
+          <%= video_tag content.media,
+              controls: true,
+              class: "w-100 rounded mb-3" %>
+
+        <% end %>
+
+      <% end %>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+
+  <div class="d-flex align-items-center gap-3">
+
+    <% if user_signed_in? %>
+
+      <% liked = content.likes.exists?(user: current_user) %>
+
+      <% if liked %>
+
+        <%= button_to coach_content_like_path(
+              content,
+              content.likes.find_by(user: current_user)
+            ),
+            method: :delete,
+            class: "btn btn-link p-0 text-danger text-decoration-none",
+            title: "Unlike" do %>
+
+          <i class="bi bi-heart-fill fs-4"></i>
+          <span class="ms-1">
+            <%= content.likes.count %>
+          </span>
+
+        <% end %>
+
+      <% else %>
+
+        <%= button_to coach_content_likes_path(content),
+            method: :post,
+            class: "btn btn-link p-0 text-dark text-decoration-none",
+            title: "Like" do %>
+
+          <i class="bi bi-heart fs-4"></i>
+          <span class="ms-1">
+            <%= content.likes.count %>
+          </span>
+
+        <% end %>
+
+      <% end %>
+
+      <button type="button"
+        class="btn btn-link p-0 text-dark text-decoration-none"
+        title="Comments"
+        data-bs-toggle="modal"
+        data-bs-target="#commentsModal-<%= content.id %>">
+
+        <i class="bi bi-chat fs-4"></i>
+
+        <span class="ms-1">
+          <%= content.comments.count %>
+        </span>
+
+      </button>
+
+    <% else %>
+
+      <span class="text-muted">
+        <i class="bi bi-heart fs-5"></i>
+        <%= content.likes.count %>
+      </span>
+
+      <span class="text-muted">
+        <i class="bi bi-chat fs-5"></i>
+        <%= content.comments.count %>
+      </span>
+
+    <% end %>
+
+  </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <small class="text-muted">
+          <i class="bi bi-eye"></i>
+          <%= content.views_count %>
+        </small>
+
+        <small class="text-muted">
+          <%= time_ago_in_words(content.created_at) %> ago
+        </small>
+  </div>
+
+  </div>
+    </div>
+
+  <% end %>
+  <% if user_signed_in? %>
+
+  <div class="modal fade comments-modal"
+       id="commentsModal-<%= content.id %>"
+       tabindex="-1"
+       aria-labelledby="commentsModalLabel-<%= content.id %>"
+       aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-end">
+
+      <div class="modal-content border-0 shadow-lg">
+
+        <div class="modal-header">
+
+          <h5 class="modal-title fw-bold"
+              id="commentsModalLabel-<%= content.id %>">
+
+            Comments
+
+          </h5>
+
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close">
+          </button>
+
+        </div>
+
+        <div class="modal-body">
+
+          <% if content.comments.any? %>
+
+            <div class="d-flex flex-column gap-3 mb-4">
+
+              <% content.comments.order(created_at: :desc).each do |comment| %>
+
+                <div class="border-bottom pb-3">
+
+                  <div class="d-flex justify-content-between mb-1">
+
+                    <strong>
+                      <%= comment.user.email %>
+                    </strong>
+
+                    <small class="text-muted">
+                      <%= time_ago_in_words(comment.created_at) %> ago
+                    </small>
+
+                  </div>
+
+                  <div>
+                    <%= simple_format(comment.content) %>
+                  </div>
+
+                  <% if comment.user == current_user %>
+
+                    <%= button_to "Delete",
+                        comment_path(comment),
+                        method: :delete,
+                        class: "btn btn-sm btn-outline-danger mt-2",
+                        form: {
+                          data: {
+                            turbo_confirm: "Delete this comment?"
+                          }
+                        } %>
+
+                  <% end %>
+
+                </div>
+
+              <% end %>
+
+            </div>
+
+          <% else %>
+
+            <div class="text-center text-muted py-4">
+
+              <i class="bi bi-chat display-6"></i>
+
+              <p class="mt-2 mb-0">
+                No comments yet.
+              </p>
+
+            </div>
+
+          <% end %>
+
+          <hr>
+
+          <%= form_with model: Comment.new,
+              url: comments_path,
+              local: true do |form| %>
+
+            <%= form.hidden_field :coach_content_id,
+                value: content.id %>
+
+            <div class="mb-3">
+
+              <%= form.text_area :content,
+                  class: "form-control",
+                  rows: 4,
+                  placeholder: "Write a comment..." %>
+
+            </div>
+
+            <%= form.submit "Post Comment",
+                class: "btn btn-dark w-100" %>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<% end %>
+
+</div>

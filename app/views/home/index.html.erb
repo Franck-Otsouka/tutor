@@ -5,11 +5,65 @@
     <div class="container">
       <h1 class="display-4 fw-bold">Tutor</h1>
 
-      <p class="lead">
-        Learn from experienced coaches and find the right tutor for you.
-      </p>
+              <p class="lead">
+            Learn from experienced coaches and find the right tutor for you.
+          </p>
 
-      <div class="hero-actions mt-4">
+         <% if @featured_video&.media&.attached? %>
+
+  <div class="hero-video my-4">
+
+    <div class="hero-video-wrapper">
+
+      <video
+        id="heroVideo"
+        class="hero-video-player"
+        preload="metadata">
+
+        <source
+          src="<%= url_for(@featured_video.media) %>"
+          type="<%= @featured_video.media.content_type %>">
+
+      </video>
+
+      <!-- Play button -->
+     <button
+        type="button"
+        class="hero-video-play"
+        onclick="
+          const v = document.getElementById('heroVideo');
+          this.style.display='none';
+          v.controls=true;
+          v.play();
+        ">
+
+        <span>
+          <i class="bi bi-play-circle-fill"></i>
+        </span>
+
+        <span class="border-animation border-animation--border-1"></span>
+        <span class="border-animation border-animation--border-2"></span>
+
+      </button>
+      <!-- Text overlay -->
+      <div class="hero-video-caption">
+
+        <h3>Learn About Tutor</h3>
+
+        <p>
+          Discover expert coaches, live sessions,
+          memberships, communities and more.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<% end %>
+
+          <div class="hero-actions mt-4">
         <%= link_to "Find a Coach",
             coach_profiles_path,
             class: "btn btn-primary btn-lg me-2" %>

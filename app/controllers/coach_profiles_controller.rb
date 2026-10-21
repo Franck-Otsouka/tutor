@@ -16,6 +16,21 @@ class CoachProfilesController < ApplicationController
       .where(active: true)
       .includes(:category)
       .order(:title)
+
+    @coach_contents = @coach_profile.user.coach_contents
+      .order(created_at: :desc)
+
+    @member =
+      current_user.present? &&
+      current_user.subscriptions
+        .joins(:membership_plan)
+        .where(
+          membership_plans: {
+            coach_profile_id: @coach_profile.id
+          }
+         )
+        .where(status: "active")
+        .exists?
   end
 
   def new

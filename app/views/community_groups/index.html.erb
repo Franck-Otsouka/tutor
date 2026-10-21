@@ -1,0 +1,72 @@
+<div class="container py-5">
+
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Communities</h1>
+
+    <p class="text-muted">
+      Connect with students and coaches who share your interests.
+    </p>
+  </div>
+
+  <% if @community_groups.any? %>
+
+    <div class="row g-4">
+
+      <% @community_groups.each do |community| %>
+
+        <div class="col-md-6 col-lg-4">
+
+          <div class="card h-100 border-0 shadow-sm">
+
+            <div class="card-body p-4 d-flex flex-column">
+
+              <h5 class="card-title fw-bold">
+                <%= community.name %>
+              </h5>
+
+              <p class="card-text text-muted flex-grow-1">
+                <%= truncate(community.description, length: 140) %>
+              </p>
+
+              <div class="mb-3">
+                <span class="text-muted small">
+                  <i class="bi bi-people"></i>
+
+                  <%= community.group_memberships.size %>
+                  <%= "member".pluralize(community.group_memberships.size) %>
+                </span>
+              </div>
+
+              <%= link_to "View Community",
+                  community_group_path(community),
+                  class: "btn btn-primary w-100" %>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  <% else %>
+
+    <div class="text-center py-5">
+
+      <i class="bi bi-people display-4 text-muted"></i>
+
+      <h3 class="mt-3">
+        No communities yet
+      </h3>
+
+      <p class="text-muted">
+        Communities will appear here once they are created.
+      </p>
+
+    </div>
+
+  <% end %>
+
+</div>

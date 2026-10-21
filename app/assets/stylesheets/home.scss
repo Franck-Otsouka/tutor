@@ -1,18 +1,14 @@
 .home-page {
-  background-color: #fff;
 
-  // ----------------------------------------
+
+  // =========================================================
   // Hero
-  // ----------------------------------------
+  // =========================================================
 
   .hero {
     padding: 6rem 0;
 
-    background: linear-gradient(
-      135deg,
-      #f8f9fa 0%,
-      #e9f2ff 100%
-    );
+
   }
 
   .hero h1 {
@@ -27,6 +23,165 @@
     font-size: 1.2rem;
   }
 
+  // =========================================================
+  // Hero Video
+  // =========================================================
+
+  .hero-video {
+    max-width: 900px;
+    margin: 2rem auto 0;
+  }
+
+  .hero-video-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .hero-video-player {
+    width: 100%;
+    max-height: 500px;
+    display: block;
+
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  // =========================================================
+  // Hero Video Play Button
+  // =========================================================
+
+  .hero-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 110px;
+    height: 110px;
+
+    transform: translate(-50%, -50%);
+
+    border: 0;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  // Main play button circle
+  .hero-video-play > span:first-child {
+    position: relative;
+    z-index: 3;
+
+    width: 110px;
+    height: 110px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.95);
+    color: #0d6efd;
+
+    font-size: 5rem;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  // Play button hover
+  .hero-video-play:hover > span:first-child {
+    transform: scale(1.08);
+    background: #fff;
+  }
+
+  // Bootstrap icon alignment
+  .hero-video-play i {
+    line-height: 1;
+  }
+
+  // =========================================================
+  // Animated Pulse Borders
+  // =========================================================
+
+  .border-animation {
+    position: absolute;
+
+    width: 110px;
+    height: 110px;
+
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+
+    pointer-events: none;
+
+    animation: pulse-border 2s linear infinite;
+  }
+
+  .border-animation--border-2 {
+    animation-delay: 1s;
+  }
+
+  @keyframes pulse-border {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  // =========================================================
+  // Video Caption
+  // =========================================================
+
+  .hero-video-caption {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 2.5rem;
+
+    color: #fff;
+    text-align: left;
+
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.35),
+      transparent
+    );
+  }
+
+  .hero-video-caption h3 {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .hero-video-caption p {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  // =========================================================
+  // Hero Actions
+  // =========================================================
+
   .hero-actions {
     display: flex;
     justify-content: center;
@@ -34,20 +189,18 @@
     gap: 0.75rem;
   }
 
-
-  // ----------------------------------------
-  // Section headings
-  // ----------------------------------------
+  // =========================================================
+  // Section Headings
+  // =========================================================
 
   .section-heading h2 {
     font-weight: 700;
     margin-bottom: 0.5rem;
   }
 
-
-  // ----------------------------------------
+  // =========================================================
   // Categories
-  // ----------------------------------------
+  // =========================================================
 
   .categories-section {
     background-color: #fff;
@@ -56,6 +209,7 @@
   .category-card {
     border: 0;
     border-radius: 16px;
+
     transition:
       transform 0.2s ease,
       box-shadow 0.2s ease;
@@ -73,6 +227,7 @@
   .category-icon {
     width: 55px;
     height: 55px;
+
     margin: 0 auto 1rem;
 
     display: flex;
@@ -80,6 +235,7 @@
     justify-content: center;
 
     border-radius: 50%;
+
     background-color: #e9f2ff;
     color: #0d6efd;
 
@@ -91,10 +247,9 @@
     margin-bottom: 1rem;
   }
 
-
-  // ----------------------------------------
-  // Coach search
-  // ----------------------------------------
+  // =========================================================
+  // Coach Search
+  // =========================================================
 
   .coach-search-section {
     background-color: #f8f9fa;
@@ -114,10 +269,9 @@
     border-radius: 0 12px 12px 0;
   }
 
-
-  // ----------------------------------------
-  // Featured coaches
-  // ----------------------------------------
+  // =========================================================
+  // Featured Coaches
+  // =========================================================
 
   .featured-coaches-section {
     background-color: #fff;
@@ -190,10 +344,37 @@
     margin-right: 0.25rem;
   }
 
+  // =========================================================
+  // Coach Rating
+  // =========================================================
 
-  // ----------------------------------------
+  .coach-rating {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 0.4rem;
+
+    font-size: 0.9rem;
+  }
+
+  .coach-rating .stars {
+    color: #f5b301;
+    letter-spacing: 0.05rem;
+  }
+
+  .coach-rating .rating-value {
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .coach-rating .rating-count {
+    color: #6c757d;
+  }
+
+  // =========================================================
   // Carousel
-  // ----------------------------------------
+  // =========================================================
 
   .carousel {
     padding: 0 3.5rem;
@@ -226,48 +407,107 @@
     opacity: 0.85;
   }
 
-
-  // ----------------------------------------
-  // Empty state
-  // ----------------------------------------
+  // =========================================================
+  // Empty State
+  // =========================================================
 
   .empty-state {
     border-radius: 16px;
     background-color: #f8f9fa;
   }
 
-  .coach-rating {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-
-  .coach-rating .stars {
-    color: #f5b301;
-    letter-spacing: 0.05rem;
-  }
-
-  .coach-rating .rating-value {
-    font-weight: 600;
-    color: #212529;
-  }
-
-  .coach-rating .rating-count {
-    color: #6c757d;
-  }
-
-
-  // ----------------------------------------
+  // =========================================================
   // Mobile
-  // ----------------------------------------
+  // =========================================================
 
   @media (max-width: 767.98px) {
+
+    // -----------------------------------------
+    // Hero
+    // -----------------------------------------
 
     .hero {
       padding: 4rem 1rem;
     }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 12vw, 3.5rem);
+    }
+
+    .hero p {
+      font-size: 1rem;
+    }
+
+    // -----------------------------------------
+    // Hero Video
+    // -----------------------------------------
+
+    .hero-video {
+      margin-top: 1.5rem;
+    }
+
+    .hero-video-wrapper {
+      border-radius: 0.75rem;
+    }
+
+    .hero-video-player {
+      min-height: 240px;
+      max-height: 360px;
+
+      object-fit: cover;
+    }
+
+    // -----------------------------------------
+    // Mobile Play Button
+    // -----------------------------------------
+
+    .hero-video-play {
+      width: 75px;
+      height: 75px;
+    }
+
+    .hero-video-play > span:first-child {
+      width: 75px;
+      height: 75px;
+
+      font-size: 3.5rem;
+    }
+
+    .border-animation {
+      width: 75px;
+      height: 75px;
+
+      border-width: 2px;
+    }
+
+    // -----------------------------------------
+    // Mobile Video Caption
+    // -----------------------------------------
+
+    .hero-video-caption {
+      padding: 1.25rem;
+
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9),
+        rgba(0, 0, 0, 0.45),
+        transparent
+      );
+    }
+
+    .hero-video-caption h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-video-caption p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    // -----------------------------------------
+    // Hero Buttons
+    // -----------------------------------------
 
     .hero-actions {
       flex-direction: column;
@@ -275,8 +515,13 @@
 
       .btn {
         margin-right: 0 !important;
+        width: 100%;
       }
     }
+
+    // -----------------------------------------
+    // Carousel
+    // -----------------------------------------
 
     .carousel {
       padding: 0 2.5rem;
@@ -288,9 +533,17 @@
       height: 38px;
     }
 
+    // -----------------------------------------
+    // Coach Cards
+    // -----------------------------------------
+
     .coach-card {
       margin-bottom: 0.5rem;
     }
+
+    // -----------------------------------------
+    // Section Headings
+    // -----------------------------------------
 
     .section-heading {
       padding: 0 1rem;

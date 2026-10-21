@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get "feed", to: "feed#index"
+
   get "coach/dashboard",
       to: "coach_dashboard#show",
       as: :coach_dashboard
@@ -13,6 +15,11 @@ Rails.application.routes.draw do
               only: [:create, :destroy]
   end
 
+  resources :coach_contents do
+  resources :likes,
+            controller: "coach_content_likes",
+            only: [:create, :destroy]
+  end
   resources :student_profiles,
             only: [:show, :edit, :update]
 
@@ -32,10 +39,15 @@ Rails.application.routes.draw do
   resources :comments,
             only: [:create, :update, :destroy]
 
-  resources :community_groups
+  resources :community_groups do
+    resources :posts
+    resources :community_posts do
+      post :create_reply, on: :member
+    end
+    resources :group_memberships, only: [:create, :destroy]
+  end
 
-  resources :group_memberships,
-            only: [:create, :destroy]
+  resources :classrooms
 
   resources :membership_plans,
             only: [:index, :show]

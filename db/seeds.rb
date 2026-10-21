@@ -185,41 +185,54 @@ puts "  Services: #{Service.count}"
 
 puts "Creating bookings..."
 
-services = Service.all
+services = Service.includes(:coach_profile).to_a
 
-students.each_with_index do |student, index|
+students.each do |student|
   rand(1..3).times do
     service = services.sample
 
-    start_time =
-      if index.even?
-        rand(1..14).days.from_now.change(
-          hour: [9, 10, 11, 13, 14, 15, 17, 18].sample,
-          min: [0, 30].sample
+    # Keep trying until we find a time that doesn't overlap
+    # with another booking for this coach.
+    booking_created = false
+
+    20.times do
+      start_time = rand(1..14).days.from_now.change(
+        hour: [9, 10, 11, 13, 14, 15, 17, 18].sample,
+        min: [0, 30].sample
+      )
+
+      end_time = start_time + service.duration.minutes
+
+      coach_has_booking = Booking
+        .joins(:service)
+        .where(services: {
+          coach_profile_id: service.coach_profile_id
+        })
+        .where.not(status: "cancelled")
+        .where(
+          "start_time < ? AND end_time > ?",
+          end_time,
+          start_time
         )
-      else
-        rand(1..14).days.ago.change(
-          hour: [9, 10, 11, 13, 14, 15, 17, 18].sample,
-          min: [0, 30].sample
-        )
-      end
+        .exists?
 
-    end_time = start_time + service.duration.minutes
+      next if coach_has_booking
 
-    status =
-      if start_time < Time.current
-        ["completed", "completed", "cancelled"].sample
-      else
-        ["pending", "confirmed", "confirmed"].sample
-      end
+      Booking.create!(
+        student: student,
+        service: service,
+        start_time: start_time,
+        end_time: end_time,
+        status: ["pending", "confirmed", "confirmed"].sample
+      )
 
-    Booking.create!(
-      student: student,
-      service: service,
-      start_time: start_time,
-      end_time: end_time,
-      status: status
-    )
+      booking_created = true
+      break
+    end
+
+    unless booking_created
+      puts "  ⚠️ Could not find an available slot for #{student.email}"
+    end
   end
 end
 
@@ -396,10 +409,12 @@ puts "  Group Memberships: #{GroupMembership.count}"
 puts "Creating community posts..."
 
 communities.each do |community|
-  members = community.users.to_a
+  coach_members = community.users.where(role: :coach).to_a
+
+  next if coach_members.empty?
 
   rand(3..7).times do
-    user = members.sample
+    user = coach_members.sample
 
     Post.create!(
       user: user,
@@ -478,6 +493,103 @@ coach_profiles.each do |coach_profile|
 end
 
 puts "  Reviews: #{Review.count}"
+
+# ---------------------------------------------------------
+# Coach Content
+# ---------------------------------------------------------
+
+puts "Creating coach content..."
+
+coach_profiles.each do |profile|
+  coach = profile.user
+
+  # Public text posts
+  rand(3..6).times do
+    CoachContent.create!(
+      user: coach,
+      title: Faker::Educator.course_name,
+      content: Faker::Lorem.paragraphs(number: 3).join("\n\n"),
+      visibility: :public_content,
+      content_type: :post
+    )
+  end
+
+  # Members-only text posts
+  rand(1..3).times do
+    CoachContent.create!(
+      user: coach,
+      title: "Premium: #{Faker::Educator.subject}",
+      content: Faker::Lorem.paragraphs(number: 4).join("\n\n"),
+      visibility: :members_only,
+      content_type: :post
+    )
+  end
+
+  # Public video
+  video_file = Rails.root.join("db/seeds/files/sample.mp4")
+
+  if File.exist?(video_file)
+    content = CoachContent.create!(
+      user: coach,
+      title: "Sample Coaching Video",
+      content: "A sample video lesson from #{coach.first_name}.",
+      visibility: :public_content,
+      content_type: :video
+    )
+
+    content.media.attach(
+      io: File.open(video_file),
+      filename: "sample.mp4",
+      content_type: "video/mp4"
+    )
+  end
+end
+
+puts "  Coach Contents: #{CoachContent.count}"
+
+# --------------------------------------------------
+
+# Community Post test data
+
+# --------------------------------------------------
+
+community = CommunityGroup.find(1)
+
+users = User.where.not(id: 33).limit(20)
+
+messages = [
+"Has anyone worked with Ruby on Rails before?",
+"I am currently learning PostgreSQL. Any tips for beginners?",
+"Does anyone have good resources for learning JavaScript?",
+"What is the best way to structure a Rails application?",
+"I just started learning React. What should I focus on first?",
+"Does anyone want to discuss today's lesson?",
+"I found a useful resource for learning programming.",
+"How do you stay motivated when learning to code?",
+"What database do you prefer for Rails projects?",
+"I would love to hear how other students approach debugging.",
+"Has anyone tried building an API with Rails?",
+"What editor do you use for programming?",
+"I am having trouble understanding ActiveRecord associations.",
+"Does anyone have experience deploying Rails applications?",
+"What is your favourite programming language?",
+"I am learning Git. What commands should I know first?",
+"Can someone explain the difference between authentication and authorization?",
+"What projects are you currently working on?",
+"Does anyone want to collaborate on a small project?",
+"I just finished my first Rails feature!"
+]
+
+users.each_with_index do |user, index|
+
+CommunityPost.create!(
+user: user,
+community_group: community,
+content: messages[index]
+)
+
+end
+
 
 # ---------------------------------------------------------
 # Summary

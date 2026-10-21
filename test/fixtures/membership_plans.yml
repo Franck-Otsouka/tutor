@@ -4,8 +4,10 @@ one:
   name: MyString
   monthly_price: 9.99
   description: MyText
+  coach_profile: two
 
 two:
   name: MyString
   monthly_price: 9.99
   description: MyText
+  coach_profile: two

@@ -1,0 +1,137 @@
+<div class="container py-5">
+
+  <div class="row justify-content-center">
+
+<div class="col-lg-8">
+
+  <div class="mb-4">
+
+    <%= link_to "← Back to Hub",
+        community_group_community_posts_path(@community_group),
+        class: "text-decoration-none" %>
+
+  </div>
+
+  <div class="card border-0 shadow-sm">
+
+    <div class="card-body p-4">
+
+      <!-- Author -->
+
+<div class="d-flex align-items-center mb-4">
+
+  <div
+    class="rounded-circle overflow-hidden flex-shrink-0 me-3"
+    style="width:50px;height:50px;">
+
+    <% if @community_post.user.avatar.attached? %>
+
+      <%= image_tag @community_post.user.avatar,
+          class: "w-100 h-100",
+          style: "object-fit:cover;" %>
+
+    <% else %>
+
+      <div
+        class="w-100 h-100 bg-secondary text-white d-flex align-items-center justify-content-center">
+
+        <i class="bi bi-person"></i>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+  <div>
+
+    <div class="fw-semibold">
+      <%= @community_post.user.first_name %>
+      <%= @community_post.user.last_name %>
+    </div>
+
+    <small class="text-muted">
+      <%= time_ago_in_words(@community_post.created_at) %> ago
+    </small>
+
+  </div>
+
+</div>
+
+      <!-- Content -->
+
+      <% if @community_post.content.present? %>
+
+        <div class="mb-4">
+
+          <%= simple_format(@community_post.content) %>
+
+        </div>
+
+      <% end %>
+
+      <!-- Link -->
+
+      <% if @community_post.link_url.present? %>
+
+        <div class="alert alert-light border mb-4">
+
+          <i class="bi bi-link-45deg"></i>
+
+          <%= link_to @community_post.link_url,
+              @community_post.link_url,
+              target: "_blank",
+              rel: "noopener noreferrer" %>
+
+        </div>
+
+      <% end %>
+
+      <!-- Media -->
+
+      <% if @community_post.media.attached? %>
+
+        <div class="mb-4 text-center">
+
+          <%= image_tag @community_post.media,
+              class: "img-fluid rounded",
+              style: "max-height:600px;object-fit:contain;" %>
+
+        </div>
+
+      <% end %>
+
+      <!-- Actions -->
+
+      <% if @community_post.user == current_user %>
+
+        <div class="d-flex gap-2">
+
+          <%= link_to "Edit",
+              edit_community_group_community_post_path(
+                @community_group,
+                @community_post
+              ),
+              class: "btn btn-outline-secondary" %>
+
+          <%= button_to "Delete",
+              community_group_community_post_path(
+                @community_group,
+                @community_post
+              ),
+              method: :delete,
+              class: "btn btn-outline-danger" %>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  </div>
+
+</div>
+
+  </div>
+
+</div>

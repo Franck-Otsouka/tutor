@@ -1,0 +1,66 @@
+/* =========================================================
+   Tutor Feed
+   ========================================================= */
+
+.feed-page {
+  width: 100%;
+}
+
+.feed-container {
+  width: 100%;
+}
+
+.feed-layout {
+  align-items: flex-start;
+}
+
+.feed-column {
+  min-width: 0;
+}
+
+/* Middle feed */
+
+.feed-scroll {
+  height: 900px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+/* =========================================================
+   Feed scrollbar
+   ========================================================= */
+
+.feed-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.feed-scroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+
+/* =========================================================
+   Mobile / tablet
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+  .feed-page {
+    width: 100%;
+  }
+
+  .feed-container {
+    width: 100%;
+  }
+
+  .feed-layout {
+    display: block;
+  }
+
+  .feed-column {
+    width: 100%;
+  }
+
+  .feed-scroll {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+}

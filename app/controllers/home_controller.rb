@@ -7,5 +7,11 @@ class HomeController < ApplicationController
       .limit(6)
 
     @categories = Category.order(:name)
+
+    @featured_video = CoachContent
+      .includes(:user)
+      .where(content_type: "video")
+      .order(created_at: :desc)
+      .first
   end
 end

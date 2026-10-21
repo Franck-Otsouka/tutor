@@ -521,5 +521,201 @@
     </div>
 
   </div>
+    <%# Community Posts %>
+
+  <div class="row g-4 mt-0">
+
+    <%# Community Groups %>
+
+    <div class="col-lg-5">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-center mb-4">
+
+            <div>
+              <h3 class="h5 mb-1">
+                Community Groups
+              </h3>
+
+              <p class="text-muted mb-0">
+                Share knowledge with your community.
+              </p>
+            </div>
+
+            <i class="bi bi-people fs-3 text-muted"></i>
+
+          </div>
+
+
+          <% if @community_groups.any? %>
+
+            <div class="list-group list-group-flush">
+
+              <% @community_groups.each do |group| %>
+
+                <div class="list-group-item px-0 py-3">
+
+                  <div class="d-flex justify-content-between
+                              align-items-center gap-3">
+
+                    <div>
+
+                      <div class="fw-semibold">
+                        <%= group.name %>
+                      </div>
+
+                      <% if group.description.present? %>
+                        <small class="text-muted">
+                          <%= truncate(group.description, length: 70) %>
+                        </small>
+                      <% end %>
+
+                    </div>
+
+                    <%= link_to new_community_group_post_path(group),
+                        class: "btn btn-sm btn-outline-primary",
+                        title: "Create Post" do %>
+                      <i class="bi bi-plus-lg"></i>
+                    <% end %>
+
+                  </div>
+
+                </div>
+
+              <% end %>
+
+            </div>
+
+          <% else %>
+
+            <div class="text-center py-4">
+
+              <i class="bi bi-people
+                        display-6 text-muted"></i>
+
+              <p class="text-muted mt-3 mb-0">
+                No community groups available yet.
+              </p>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <%# Recent Posts %>
+
+    <div class="col-lg-7">
+
+      <div class="card border-0 shadow-sm h-100">
+
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between
+                      align-items-center mb-4">
+
+            <div>
+              <h3 class="h5 mb-1">
+                My Recent Posts
+              </h3>
+
+              <p class="text-muted mb-0">
+                Your latest community posts.
+              </p>
+            </div>
+
+          </div>
+
+
+          <% if @recent_posts.any? %>
+
+            <div class="list-group list-group-flush">
+
+              <% @recent_posts.each do |post| %>
+
+                <%= link_to community_group_post_path(
+                              post.community_group,
+                              post
+                            ),
+                            class: "list-group-item
+                                    list-group-item-action
+                                    px-0 py-3" do %>
+
+                  <div class="d-flex justify-content-between
+                              align-items-start gap-3">
+
+                    <div>
+
+                      <div class="fw-semibold mb-1">
+                        <%= truncate(post.content, length: 100) %>
+                      </div>
+
+                      <small class="text-muted">
+                        <%= post.community_group.name %>
+                        ·
+                        <%= time_ago_in_words(post.created_at) %>
+                        ago
+                      </small>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right
+                              text-muted"></i>
+
+                  </div>
+
+                <% end %>
+
+              <% end %>
+
+            </div>
+
+          <% else %>
+
+            <div class="text-center py-4">
+
+              <i class="bi bi-chat-square-text
+                        display-6 text-muted"></i>
+
+              <h4 class="h6 mt-3">
+                No posts yet
+              </h4>
+
+              <p class="text-muted mb-3">
+                Start sharing your knowledge with the community.
+              </p>
+
+              <% if @community_groups.any? %>
+
+                <%= link_to new_community_group_post_path(
+                              @community_groups.first
+                            ),
+                            class: "btn btn-primary btn-sm" do %>
+                  <i class="bi bi-plus-lg me-1"></i>
+                  Create Your First Post
+                <% end %>
+
+              <% end %>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
